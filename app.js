@@ -43,6 +43,7 @@ async function startAuction() {
     .setTopicId(topicId)
     .subscribe(client, null, (message) => {
       let messageAsString = Buffer.from(message.contents, "utf8").toString();
+      messageProcessor(messageAsString);
       console.log(
         `${message.consensusTimestamp.toDate()} Received: ${messageAsString}`
       );
@@ -64,6 +65,18 @@ async function startAuction() {
   //send10Bid(topicId);
 
   return topicId;
+}
+
+/**
+ * since hcs allows us to send generic unformatted messages.  
+ * we will need to define the message structure and process accordingly.  
+ * reject the incorrect messages to maintain the integrity of consensus.  
+ * we will ignore the incorrect messages.  
+ * those are not part of our internal consensus of how auction is run.  
+ * @param {*} message 
+ */
+function messageProcessor(message) {
+  // this is for after-hackathon.
 }
 
 async function sendMsg(topicId, message) {
@@ -126,7 +139,7 @@ const port = 3000
 app.get('/bid', (req, res) => {
   let amount = req.query.amount || 10;
   sendBid(topicId, amount);
-  res.send('bid!')
+  res.send(`bid ${amount}`)
 })
 
 app.get('/', (req, res) => {
