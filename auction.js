@@ -19,13 +19,16 @@ const client = Client.forTestnet();
 // Set the operator account ID and operator private key
 client.setOperator(myAccountId, myPrivateKey);
 
+
+let topicId;
+
 async function startAuction() {
   // Create a new topic
   let txResponse = await new TopicCreateTransaction().execute(client);
 
   // Grab the newly generated topic ID
   let receipt = await txResponse.getReceipt(client);
-  let topicId = receipt.topicId;
+  topicId = receipt.topicId;
   console.log(`Your topic ID is: ${topicId}`);
 
   // Wait 5 seconds between consensus topic creation and subscription creation
@@ -54,7 +57,9 @@ async function startAuction() {
 
   sendMsg(topicId, "Auction starts.");
 
-  send10Bid(topicId);
+  //send10Bid(topicId);
+
+  return topicId;
 }
 
 async function sendMsg(topicId, message) {
@@ -70,26 +75,40 @@ async function sendMsg(topicId, message) {
   console.log("The message transaction status: " + transactionStatus.toString());
 }
 
+async function sendBid(topicId, amount) {
+  sendMsg(topicId, `bid amount ${amount}`);
+}
+
+/**
+ * send 10 bids for testing
+ * @param {*} topicId 
+ */
 async function send10Bid(topicId) {
-  // send 10 messages
   for (let i = 0; i < 10; i++) {
-    let sendResponse = await new TopicMessageSubmitTransaction({
-      topicId: topicId,
-      message: `bid amount ${i}`,
-    }).execute(client);
-    const getReceipt = await sendResponse.getReceipt(client);
+    // let sendResponse = await new TopicMessageSubmitTransaction({
+    //   topicId: topicId,
+    //   message: `bid amount ${i}`,
+    // }).execute(client);
+    // const getReceipt = await sendResponse.getReceipt(client);
   
-    // Get the status of the transaction
-    const transactionStatus = getReceipt.status;
-    console.log("The message transaction status: " + transactionStatus.toString());
+    // // Get the status of the transaction
+    // const transactionStatus = getReceipt.status;
+    // console.log("The message transaction status: " + transactionStatus.toString());
+
+    sendBid(topicId, i);
 
     
     await sleep(1000);
   }
 }
 
+async function main() {
+  await startAuction();
+  send10Bid(topicId);
+}
+
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-startAuction();
+main();
