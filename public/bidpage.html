@@ -173,7 +173,7 @@
         var bidButton = document.querySelector('.bid-button');
         bidButton.addEventListener('click', function() {
             // Make GET request to /bid using Axios
-            axios.get('/bid')
+            axios.get(`/bid?amount=${currentBidPrice+10}`)
                 .then(response => {
                     // Handle response data (e.g., update UI)
                     console.log(response.data); // Example: Log response data to console
