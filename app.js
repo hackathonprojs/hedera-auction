@@ -23,6 +23,7 @@ client.setOperator(myAccountId, myPrivateKey);
 
 
 let topicId;
+let currentBidPrice = 0;
 
 
 
@@ -43,7 +44,7 @@ async function startAuction() {
     .setTopicId(topicId)
     .subscribe(client, null, (message) => {
       let messageAsString = Buffer.from(message.contents, "utf8").toString();
-      messageProcessor(messageAsString);
+      msgProcessor(messageAsString);
       console.log(
         `${message.consensusTimestamp.toDate()} Received: ${messageAsString}`
       );
@@ -75,8 +76,12 @@ async function startAuction() {
  * those are not part of our internal consensus of how auction is run.  
  * @param {*} message 
  */
-function messageProcessor(message) {
+function msgProcessor(message) {
   // this is for after-hackathon.
+  let msgObj = JSON.parse(message);
+  if (msgObj.type == "bid") {
+    currentBidPrice = msgObj.amount;
+  }
 }
 
 async function sendMsg(topicId, message) {
@@ -93,7 +98,11 @@ async function sendMsg(topicId, message) {
 }
 
 async function sendBid(topicId, amount) {
-  sendMsg(topicId, `bid amount ${amount}`);
+  let msgObj = { 
+    "type": "bid", 
+    "amount": amount 
+  }
+  sendMsg(topicId, JSON.stringify(msgObj));
 }
 
 /**
@@ -140,6 +149,10 @@ app.get('/bid', (req, res) => {
   let amount = req.query.amount || 10;
   sendBid(topicId, amount);
   res.send(`bid ${amount}`)
+})
+
+app.get('/bidprice', (req, res) => {
+  res.send(`${currentBidPrice}`);
 })
 
 app.get('/', (req, res) => {
