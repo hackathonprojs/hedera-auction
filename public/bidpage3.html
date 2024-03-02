@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction</title>
+    <style>
+        </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Auction</h1>
+        <div class="auction-item">
+            <img src="https://via.placeholder.com/400" alt="Placeholder Image">
+            <h2>Name: Example Item</h2>
+            <div class="bid-price">Current Bid: $100</div>
+            <button class="bid-button">Bid Now</button>
+        </div>
+    </div>
+    <div class="footer">
+        &copy; 2024 Auction. All rights reserved.
+    </div>
+    <script>
+        // Include Axios library
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+        // JavaScript to trigger color change effect for the bid price
+        function flashBidPrice() {
+            var bidPrice = document.querySelector('.bid-price');
+            bidPrice.classList.add('changed');
+            setTimeout(function() {
+                bidPrice.classList.remove('changed');
+            }, 2000); // Change color back after 2 seconds (2000 milliseconds)
+        }
+
+        // JavaScript for bid button click
+        var bidButton = document.querySelector('.bid-button');
+        bidButton.addEventListener('click', function() {
+            // Make GET request to /bid using Axios
+            axios.get('/bid')
+                .then(response => {
+                    // Handle response data (e.g., update UI)
+                    console.log(response.data); // Example: Log response data to console
+                    flashBidPrice(); // Example: Flash bid price after successful bid
+                })
+                .catch(error => {
+                    console.error(error); // Handle errors
+                });
+        });
+
+        // Example of invoking the effect when bid price changes (replace with your actual code)
+        setTimeout(function() {
+            flashBidPrice();
+        }, 3000); // Example: Change the bid price color after 3 seconds (3000 milliseconds)
+    </script>
+</body>
+</html>
