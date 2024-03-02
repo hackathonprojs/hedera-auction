@@ -136,7 +136,7 @@
     <div class="container">
         <h1>Auction</h1>
         <div class="auction-item">
-            <img src="https://via.placeholder.com/400" alt="Placeholder Image">
+            <img src="./assets/name_service.jpeg" alt="Placeholder Image">
             <h2>Name: Example Item</h2>
             <div class="bid-price">Current Bid: $100</div>
             <a href="#" class="bid-button">Bid Now</a>
@@ -145,7 +145,27 @@
     <div class="footer">
         &copy; 2024 Auction. All rights reserved.
     </div>
+
+
+    
     <script>
+        // JavaScript for bid button click
+        var bidButton = document.querySelector('.bid-button');
+        bidButton.addEventListener('click', function() {
+            // Make GET request to /bid
+            fetch('/bid')
+                .then(response => response.text())
+                .then(data => {
+                    // Handle response data (e.g., update UI)
+                    console.log(data); // Example: Log response data to console
+                    flashBidPrice(); // Example: Flash bid price after successful bid
+                })
+                .catch(error => {
+                    console.error(error); // Handle errors
+                });
+        });
+
+
         // JavaScript to trigger color change effect for the bid price
         function flashBidPrice() {
             var bidPrice = document.querySelector('.bid-price');
