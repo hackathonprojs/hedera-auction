@@ -147,24 +147,42 @@
     </div>
 
 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     
     <script>
+
+        let currentBidPrice = 0;
+
+        // // JavaScript for bid button click - plain js
+        // var bidButton = document.querySelector('.bid-button');
+        // bidButton.addEventListener('click', function() {
+        //     // Make GET request to /bid
+        //     fetch('/bid')
+        //         .then(response => response.text())
+        //         .then(data => {
+        //             // Handle response data (e.g., update UI)
+        //             console.log(data); // Example: Log response data to console
+        //             flashBidPrice(); // Example: Flash bid price after successful bid
+        //         })
+        //         .catch(error => {
+        //             console.error(error); // Handle errors
+        //         });
+        // });
+
         // JavaScript for bid button click
         var bidButton = document.querySelector('.bid-button');
         bidButton.addEventListener('click', function() {
-            // Make GET request to /bid
-            fetch('/bid')
-                .then(response => response.text())
-                .then(data => {
+            // Make GET request to /bid using Axios
+            axios.get('/bid')
+                .then(response => {
                     // Handle response data (e.g., update UI)
-                    console.log(data); // Example: Log response data to console
+                    console.log(response.data); // Example: Log response data to console
                     flashBidPrice(); // Example: Flash bid price after successful bid
                 })
                 .catch(error => {
                     console.error(error); // Handle errors
                 });
         });
-
 
         // JavaScript to trigger color change effect for the bid price
         function flashBidPrice() {
@@ -179,6 +197,34 @@
         setTimeout(function() {
             flashBidPrice();
         }, 3000); // Example: Change the bid price color after 3 seconds (3000 milliseconds)
+
+
+        // Function to update bid price on the page
+        function updateBidPrice(newBidPrice) {
+            console.log(`bid price: ${newBidPrice}`);
+
+            if (newBidPrice != currentBidPrice) {
+                currentBidPrice = newBidPrice;
+                var bidPriceElement = document.querySelector('.bid-price');
+                bidPriceElement.textContent = `Current Bid: $${newBidPrice}`;
+                flashBidPrice();
+            }
+        }
+
+        // Function to periodically poll /bidprice using Axios
+        function pollBidPrice() {
+            axios.get('/bidprice')
+                .then(response => {
+                    updateBidPrice(response.data); // Update bid price with response data
+                })
+                .catch(error => {
+                    console.error('Error fetching bid price:', error); // Handle errors
+                });
+        }
+
+        // Start polling initially and periodically (adjust polling interval as needed)
+        pollBidPrice();
+        setInterval(pollBidPrice, 1000); // Poll every 1 seconds
     </script>
 </body>
 </html>
