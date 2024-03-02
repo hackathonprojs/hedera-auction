@@ -1,6 +1,31 @@
-# auction for name service using HCS
+# Auction for name service using HCS
 
-## setup
+
+### Why Auction?
+
+Auctions of valuable resources leads to better price discovery, enabling owners to maximize profit.
+
+### Auction advantages on HCS
+- Cheap
+    -   Some L1 are very expensive, especially to do high volume. 
+- Fair and ordered timestamp
+- No front-run
+- Fast
+
+
+
+### HCS serves 2 purposes:
+- consensus mechanism
+- pubsub mechanism
+
+------------------------
+## Cross-chain bond
+
+
+
+--------------------------------------------------------------
+
+### setup
 the project setup follows these instructions: https://docs.hedera.com/hedera/getting-started/environment-set-up
 
 
