@@ -2,3 +2,9 @@
 
 ## setup
 the project setup follows these instructions: https://docs.hedera.com/hedera/getting-started/environment-set-up
+
+
+
+
+#### attribution
+hexagon.png <a href='https://pngtree.com/freepng/technologically-shaped-hexagonal-border_4731225.html'>png image from pngtree.com/</a>  
